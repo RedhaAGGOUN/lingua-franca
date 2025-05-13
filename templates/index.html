@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lingua Franca 🌍</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+    <h1>Lingua Franca 🌍</h1>
+    <h2>Translate your thoughts</h2>
+    
+    <form method="POST">
+        <label for="input_text">Text to Translate:</label>
+        <textarea id="input_text" name="input_text" rows="4" dir="{{ 'rtl' if src_lang == 'ar' else 'ltr' }}">{{ input_text }}</textarea>
+
+        <label for="src_lang">Source Language:</label>
+        <select id="src_lang" name="src_lang">
+            <option value="auto" {% if src_lang == "auto" %}selected{% endif %}>Auto</option>
+            <option value="en" {% if src_lang == "en" %}selected{% endif %}>English</option>
+            <option value="fr" {% if src_lang == "fr" %}selected{% endif %}>French</option>
+            <option value="es" {% if src_lang == "es" %}selected{% endif %}>Spanish</option>
+            <option value="de" {% if src_lang == "de" %}selected{% endif %}>German</option>
+            <option value="ar" {% if src_lang == "ar" %}selected{% endif %}>Arabic</option>
+        </select>
+
+        <label for="dest_lang">Target Language:</label>
+        <select id="dest_lang" name="dest_lang">
+            <option value="en" {% if dest_lang == "en" %}selected{% endif %}>English</option>
+            <option value="fr" {% if dest_lang == "fr" %}selected{% endif %}>French</option>
+            <option value="es" {% if dest_lang == "es" %}selected{% endif %}>Spanish</option>
+            <option value="de" {% if dest_lang == "de" %}selected{% endif %}>German</option>
+            <option value="ar" {% if dest_lang == "ar" %}selected{% endif %}>Arabic</option>
+        </select>
+
+        <label for="engine">Translation Engine:</label>
+        <select id="engine" name="engine">
+            <option value="googletranslate" {% if engine == "googletranslate" %}selected{% endif %}>Google Translate</option>
+            <option value="libretranslate" {% if engine == "libretranslate" %}selected{% endif %}>LibreTranslate</option>
+        </select>
+
+        <button type="submit">Translate</button>
+    </form>
+
+    {% if translated_text %}
+    <div class="result" dir="{{ 'rtl' if dest_lang == 'ar' else 'ltr' }}">
+        <h3>Translated Text:</h3>
+        <p>{{ translated_text }}</p>
+    </div>
+    {% endif %}
+
+    <div class="footer">
+        <p>🛠️ Designed by: <strong>Redha & Rooney</strong></p>
+    </div>
+</div>
+</body>
+</html>
