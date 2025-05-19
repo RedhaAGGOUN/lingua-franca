@@ -1,76 +1,57 @@
+
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #000000;
-    color: #f1c40f;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-color: #0f0f0f;
+    color: #f9f9f9;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+    padding: 20px;
 }
-
 .container {
-    background-color: #1a1a1a;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 0 30px rgba(241, 196, 15, 0.4);
-    width: 90%;
     max-width: 800px;
+    margin: auto;
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(255, 255, 0, 0.3);
 }
-
-h1, h2 {
-    text-align: center;
-    color: #f1c40f;
-}
-
-label {
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-textarea, select {
-    width: 100%;
+textarea {
+    width: 90%;
     padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 6px;
+    border-radius: 8px;
     border: none;
-    background-color: #333;
-    color: #f1c40f;
+    background: #2a2a2a;
+    color: white;
 }
-
-textarea::placeholder {
-    color: #ccc;
-}
-
-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #f1c40f;
-    color: #000;
+select, button, input[type="file"] {
+    margin: 10px;
+    padding: 10px;
+    border-radius: 8px;
     border: none;
-    border-radius: 6px;
+    background-color: #ffcc00;
+    color: black;
     font-weight: bold;
-    font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
-
-button:hover {
-    background-color: #f39c12;
+.output {
+    background: #222;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 15px;
+    min-height: 80px;
 }
-
-.result {
-    background-color: #222;
-    padding: 15px;
-    border-radius: 6px;
-    margin-top: 20px;
-    color: #f1f1f1;
+.status {
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #ffcc00;
 }
-
-.footer {
-    text-align: center;
+.logo {
+    width: 240px; /* 3 times bigger than 80px */
+    height: auto;
+    margin-bottom: 20px;
+}
+.footer-note {
+    font-size: 0.4rem;
+    color: #aaaaaa;
     margin-top: 30px;
-    font-size: 14px;
-    color: #888;
 }
