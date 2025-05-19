@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lingua Franca</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script>
+        let recognition;
+        let fullTranscript = "";
+
+        window.onload = function () {
+            const input = document.getElementById("input_text");
+            const status = document.getElementById("voice_status");
+            const srcLang = document.getElementById("src_lang").value;
+
+            if ('webkitSpeechRecognition' in window) {
+                recognition = new webkitSpeechRecognition();
+                recognition.lang = srcLang === "auto" ? "en-US" : srcLang + "-US";
+                recognition.continuous = true;
+                recognition.interimResults = true;
+
+                recognition.onstart = function () {
+                    status.innerText = "🎙️ Voice recognition started. Speak now...";
+                };
+
+                recognition.onresult = function (event) {
+                    let interim = "";
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        const transcript = event.results[i][0].transcript;
+                        if (event.results[i].isFinal) {
+                            fullTranscript += transcript + " ";
+                            input.value = fullTranscript.trim();
+                            translateText();
+                        } else {
+                            interim += transcript;
+                            input.value = (fullTranscript + interim).trim();
+                        }
+                    }
+                };
+
+                recognition.onerror = function () {
+                    status.innerText = "❌ Error during voice recognition.";
+                };
+
+                recognition.onend = function () {
+                    status.innerText = "🔁 Restarting voice recognition...";
+                    recognition.start();
+                };
+
+                recognition.start();
+            } else {
+                status.innerText = "⚠️ Speech recognition not supported in this browser.";
+            }
+        }
+
+        async function translateText() {
+            const text = document.getElementById("input_text").value;
+            const source = document.getElementById("src_lang").value;
+            const target = document.getElementById("dest_lang").value;
+
+            if (text.trim() === "") {
+                document.getElementById("translated_text").innerText = "";
+                return;
+            }
+
+            const response = await fetch("/translate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text, source, target })
+            });
+
+            const data = await response.json();
+            document.getElementById("translated_text").innerText = data.translation || "Error";
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("pdf_form").addEventListener("submit", async function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                formData.append("src_lang", document.getElementById("src_lang").value);
+                formData.append("dest_lang", document.getElementById("dest_lang").value);
+
+                const response = await fetch("/upload_pdf", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+                document.getElementById("pdf_translation").innerText = data.translation || data.error || "Error";
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <img src="/static/logo.png" alt="Logo" class="logo" />
+        <h1>Lingua Franca</h1>
+        <div id="voice_status" class="status"></div>
+
+        <textarea id="input_text" oninput="translateText()" placeholder="Speak or type..."></textarea><br>
+
+        From:
+        <select id="src_lang" onchange="translateText()">
+            <option value="auto">Auto</option>
+            <option value="en">English</option>
+            <option value="fr">French</option>
+            <option value="es">Spanish</option>
+            <option value="zh">Chinese</option>
+            <option value="ar">Arabic</option>
+        </select>
+        To:
+        <select id="dest_lang" onchange="translateText()">
+            <option value="en">English</option>
+            <option value="fr">French</option>
+            <option value="es">Spanish</option>
+            <option value="zh">Chinese</option>
+            <option value="ar">Arabic</option>
+        </select>
+
+        <h3>Translation:</h3>
+        <div id="translated_text" class="output"></div>
+
+        <h3>Or upload a PDF to translate:</h3>
+        <form id="pdf_form">
+            <input type="file" name="pdf_file" accept="application/pdf">
+            <button type="submit">Translate PDF</button>
+        </form>
+        <div id="pdf_translation" class="output"></div>
+
+        <footer>
+            <p>Designed by <strong>Redha & Rooney</strong> — {{ today }}</p>
+        </footer>
+    </div>
+</body>
+</html>
